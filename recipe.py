@@ -298,10 +298,10 @@ def print_results():
     most_positive_tweet = tweets.find_one({"sentiment" : "positive"}, sort=[("score", -1)])
     most_negative_tweet = tweets.find_one({"sentiment" : "negative"}, sort=[("score", 1)])
 
-    mean_results = tweets.aggregate([{"$group" : {"_id": "$sentiment", "avgScore" : { "$avg" : "$score"}}}])
+    mean_results = list(tweets.aggregate([{"$group" : {"_id": "$sentiment", "avgScore" : { "$avg" : "$score"}}}]))
 
-    avg_pos_score = mean_results['result'][2]['avgScore'] 
-    avg_neg_score = mean_results['result'][1]['avgScore'] 
+    avg_pos_score = mean_results[1]['avgScore'] 
+    avg_neg_score = mean_results[0]['avgScore'] 
     
     print "SENTIMENT BREAKDOWN"
     print "Number (%%) of positive tweets: %d (%.2f%%)" % (num_positive_tweets, 100*float(num_positive_tweets) / num_tweets)
